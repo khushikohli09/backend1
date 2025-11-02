@@ -21,13 +21,7 @@ const db = mysql.createConnection({
 });
 
 // Connect to database
-db.connect((err) => {
-  if (err) {
-    console.error("❌ Database connection failed:", err);
-    process.exit(1); // Stop server if DB connection fails
-  }
-  console.log("✅ Connected to RDS database!");
-});
+
 
 // POST route to handle contact form submission
 app.post('/submit', (req, res) => {
@@ -53,6 +47,6 @@ app.get('/', (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on http://0.0.0.0:${PORT}`);
 });
