@@ -10,8 +10,8 @@ app.use(express.static('frontend')); // your frontend folder
 const db = mysql.createConnection({
   host: "database-1.cx64aao0qpzl.us-east-1.rds.amazonaws.com", // RDS endpoint
   user: "admin",                            // RDS username
-  password: "myKhushi",                 // RDS password
-  database: "myKhushi"              // Database name
+  password: "kh123shi",                 // RDS password
+  database: "kh123shi"              // Database name
 });
 
 db.connect((err) => {
