@@ -7,12 +7,17 @@ document.getElementById('contactForm').addEventListener('submit', async (e) => {
     message: document.getElementById('message').value
   };
 
-  const response = await fetch('/submit', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  });
+  try {
+    const response = await fetch('/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
 
-  const result = await response.json();
-  document.getElementById('responseMsg').textContent = result.message;
+    const result = await response.json();
+    document.getElementById('responseMsg').textContent = result.message;
+  } catch (err) {
+    console.error(err);
+    document.getElementById('responseMsg').textContent = 'Error submitting form!';
+  }
 });

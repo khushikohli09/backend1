@@ -1,35 +1,58 @@
+// server.js
 const express = require('express');
 const mysql = require('mysql2'); // MySQL driver
+const path = require('path');
 const app = express();
 const PORT = 3000;
 
+// Middleware
 app.use(express.json());
-app.use(express.static('frontend')); // your frontend folder
+app.use(express.urlencoded({ extended: true }));
+
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Connect to RDS database
 const db = mysql.createConnection({
   host: "database-1.cx64aao0qpzl.us-east-1.rds.amazonaws.com", // RDS endpoint
   user: "admin",                            // RDS username
-  password: "kh123shi",                 // RDS password
-  database: "MYKHUSHI"              // Database name
+  password: "kh123shi",                     // RDS password
+  database: "MYKHUSHI"                      // Database name (case-sensitive)
 });
 
+// Connect to database
 db.connect((err) => {
-  if (err) throw err;
+  if (err) {
+    console.error("❌ Database connection failed:", err);
+    process.exit(1); // Stop server if DB connection fails
+  }
   console.log("✅ Connected to RDS database!");
 });
 
-// Example route to insert contact form data
+// POST route to handle contact form submission
 app.post('/submit', (req, res) => {
   const { name, email, message } = req.body;
+
+  if (!name || !email || !message) {
+    return res.status(400).json({ message: "All fields are required!" });
+  }
+
   const sql = "INSERT INTO contacts (name, email, message) VALUES (?, ?, ?)";
   db.query(sql, [name, email, message], (err, result) => {
     if (err) {
-      console.log(err);
+      console.error("Database error:", err);
       return res.status(500).json({ message: "Database error" });
     }
     res.json({ message: "Form submitted and saved!" });
   });
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Default route (optional: redirect to contact page)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'contactus.html'));
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
