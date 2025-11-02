@@ -11,7 +11,7 @@ const db = mysql.createConnection({
   host: "database-1.cx64aao0qpzl.us-east-1.rds.amazonaws.com", // RDS endpoint
   user: "admin",                            // RDS username
   password: "kh123shi",                 // RDS password
-  database: "kh123shi"              // Database name
+  database: "MYKHUSHI"              // Database name
 });
 
 db.connect((err) => {
